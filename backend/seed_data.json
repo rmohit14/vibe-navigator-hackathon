@@ -1,0 +1,44 @@
+[
+  {
+    "location_name": "Hauz Khas Village",
+    "city": "Delhi",
+    "category": "Cafe",
+    "review": "Amazing place overlooking the lake. It's always buzzing with a creative crowd and great music. Perfect for a weekend evening.",
+    "source": "Google Maps"
+  },
+  {
+    "location_name": "Hauz Khas Village",
+    "city": "Delhi",
+    "category": "Cafe",
+    "review": "Can get very crowded and loud, especially on weekends. The service can be a bit slow when it's busy, but the vibe is worth it.",
+    "source": "Zomato"
+  },
+  {
+    "location_name": "Lodhi Garden",
+    "city": "Delhi",
+    "category": "Park",
+    "review": "A beautiful, historical park. It's vast and peaceful, perfect for morning walks, jogs, or just relaxing with a book. Very well maintained.",
+    "source": "TripAdvisor"
+  },
+  {
+    "location_name": "Lodhi Garden",
+    "city": "Delhi",
+    "category": "Park",
+    "review": "Great for picnics. You see a mix of families, couples, and fitness enthusiasts. It's a very calming, nature-filled space right in the city.",
+    "source": "Google Maps"
+  },
+  {
+    "location_name": "Perch Wine & Coffee Bar",
+    "city": "Delhi",
+    "category": "Cafe",
+    "review": "A very chic and quiet spot. The coffee is excellent and it's great for conversations or getting some work done. A bit pricey but the quality is top-notch.",
+    "source": "Zomato"
+  },
+  {
+    "location_name": "India Gate",
+    "city": "Delhi",
+    "category": "Monument",
+    "review": "A majestic monument. The area around it is a popular hangout spot, especially in the evenings. It's full of people and has a very patriotic and lively feel.",
+    "source": "Google Maps"
+  }
+]

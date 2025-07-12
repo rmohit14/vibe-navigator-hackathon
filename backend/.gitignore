@@ -1,0 +1,11 @@
+# Environment variables - contains secrets!
+.env
+
+# Local Chroma vector database
+chroma_db/
+
+# Python virtual environment
+venv/
+
+# Python cache files
+__pycache__/
