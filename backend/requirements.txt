@@ -9,3 +9,4 @@ langchain-community
 selenium
 beautifulsoup4
 geopy
+chromadb
