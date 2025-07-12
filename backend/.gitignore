@@ -2,7 +2,7 @@
 .env
 
 # Local Chroma vector database
-chroma_db/
+
 
 # Python virtual environment
 venv/
