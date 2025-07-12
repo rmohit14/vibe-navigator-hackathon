@@ -10,3 +10,4 @@ langchain-community
 selenium
 beautifulsoup4
 geopy
+sentence-transformers
