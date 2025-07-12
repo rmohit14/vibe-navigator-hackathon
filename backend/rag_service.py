@@ -4,9 +4,7 @@ from dotenv import load_dotenv
 import pymongo
 import certifi
 from langchain_core.documents import Document
-# --- [START]  CHANGES ARE HERE ---
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-# --- [END]  CHANGES ARE HERE ---
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain.prompts import ChatPromptTemplate
@@ -23,13 +21,11 @@ client = pymongo.MongoClient(MONGO_URI, tlsCAFile=certifi.where())
 db = client.get_database("vibe_navigator_db")
 reviews_collection = db.get_collection("reviews")
 
-# --- [START] THIS SECTION IS CHANGED ---
-# Use Google's lightweight embedding model instead of HuggingFace's
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=GOOGLE_API_KEY)
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=GOOGLE_API_KEY, temperature=0.2)
-# --- [END] THIS SECTION IS CHANGED ---
 
 def build_vector_store():
+    # ... (This function is unchanged)
     print("Fetching reviews from MongoDB...")
     reviews = list(reviews_collection.find({}))
     if not reviews:
@@ -52,9 +48,8 @@ def build_vector_store():
     print(f"Created {len(chunks)} text chunks.")
 
     print("Creating embeddings with the Google API. This may take a moment...")
-    # Note: This will now use your Google API key and may incur small costs if you build many times.
     vector_store = Chroma.from_documents(
-        documents=chunks, 
+        documents=chunks,
         embedding=embeddings,
         persist_directory="./chroma_db"
     )
@@ -65,6 +60,9 @@ def get_vibe_summary(location_name: str) -> dict:
     try:
         vector_store = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
     except Exception as e:
+        # This now includes a more specific error for chromadb
+        if "Could not import chromadb" in str(e):
+             return {"error": "Could not import chromadb python package. Please install it with `pip install chromadb`."}
         return {"error": f"Could not load vector store. Have you run the indexing? Error: {e}"}
 
     retriever = vector_store.as_retriever(search_kwargs={"k": 10})
@@ -79,21 +77,49 @@ def get_vibe_summary(location_name: str) -> dict:
     if truly_relevant_docs:
         context = "\n---\n".join([doc.page_content for doc in truly_relevant_docs])
         template = """
-        You are Vibe Navigator, an insightful and witty AI city guide...
-        """ # Prompt is unchanged
+        You are Vibe Navigator, an insightful and witty AI city guide. Your task is to generate a detailed "vibe report" for a location based *only* on the user reviews provided in the CONTEXT.
+        Follow these steps:
+        1.  Analyze the Vibe: Read all reviews in the CONTEXT to understand the overall atmosphere.
+        2.  Identify Key Dimensions: Based on the reviews, analyze the following dimensions:
+            - Ambience: What is the general feeling? (e.g., "cozy and rustic", "modern and bustling", "peaceful and serene").
+            - Crowd: Who goes there? (e.g., "popular with students", "a mix of families and young professionals", "mostly tourists").
+            - Noise Level: Is it loud or quiet? (e.g., "lively with upbeat music", "generally quiet and good for conversation").
+        3.  Synthesize a Summary: Write a playful but insightful 2-3 sentence summary. Acknowledge both positive and negative points if they exist (e.g., "it can get a bit loud, but the energy is infectious").
+        4.  Extract Tags & Emojis: Generate relevant tags and emojis that capture the essence of the vibe.
+        CONTEXT:
+        {context}
+        QUESTION:
+        What is the vibe of {question}?
+        Your response MUST be a single, valid JSON object with the following keys: "summary", "vibe_dimensions", "tags", and "emojis".
+        - "summary": (string) Your 2-3 sentence summary.
+        - "vibe_dimensions": (object) An object with "ambience", "crowd", and "noise_level" as keys.
+        - "tags": (array of strings) 5 relevant, single-word, lowercase vibe tags.
+        - "emojis": (array of strings) 4-5 emojis that represent the vibe.
+        """
         prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | llm
         response_str = chain.invoke({"context": context, "question": location_name}).content
 
+        # --- [START] THIS IS THE NEW, MORE ROBUST PARSING LOGIC ---
         try:
-            if response_str.strip().startswith("```json"):
-                response_str = response_str.strip()[7:-3]
-            vibe_json = json.loads(response_str)
-            vibe_json['status'] = 'found'
-            vibe_json['citations'] = [doc.page_content for doc in truly_relevant_docs]
-            return vibe_json
+            # Find the start and end of the JSON object
+            json_start = response_str.find('{')
+            json_end = response_str.rfind('}') + 1
+
+            if json_start != -1 and json_end != 0:
+                # Extract and parse the JSON part of the string
+                json_str = response_str[json_start:json_end]
+                vibe_json = json.loads(json_str)
+                vibe_json['status'] = 'found'
+                vibe_json['citations'] = [doc.page_content for doc in truly_relevant_docs]
+                return vibe_json
+            else:
+                # If no '{' or '}' is found, raise an error to be caught below
+                raise json.JSONDecodeError("No JSON object found in response", response_str, 0)
         except json.JSONDecodeError:
-            return {"error": "Failed to parse the vibe summary from the AI.", "raw_response": response_str}
+            return {"error": "Failed to parse the vibe summary from the AI."}
+        # --- [END] THIS IS THE NEW, MORE ROBUST PARSING LOGIC ---
+
     else:
         all_known_locations = reviews_collection.distinct("location_name")
         return {
