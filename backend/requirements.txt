@@ -4,10 +4,8 @@ python-dotenv
 pymongo
 certifi
 langchain-google-genai
-langchain-huggingface
 langchain-text-splitters
 langchain-community
 selenium
 beautifulsoup4
 geopy
-sentence-transformers
