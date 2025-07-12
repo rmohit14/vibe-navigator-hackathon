@@ -1,9 +1,8 @@
-# backend/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from rag_service import get_vibe_summary
 
-# --- [START] ADD THIS SECTION FOR DATABASE CONNECTION ---
+# --- Database Connection Setup ---
 import os
 import pymongo
 import certifi
@@ -12,23 +11,24 @@ from dotenv import load_dotenv
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
 
-# Make sure you have a MONGO_URI in your .env file
 if not MONGO_URI:
     raise ValueError("MONGO_URI must be set in the .env file")
 
 client = pymongo.MongoClient(MONGO_URI, tlsCAFile=certifi.where())
 db = client.get_database("vibe_navigator_db")
 reviews_collection = db.get_collection("reviews")
-# --- [END] ADD THIS SECTION ---
-
+# --- End Database Setup ---
 
 app = FastAPI()
 
-# --- Your existing CORS Middleware Setup ---
+# --- THIS IS THE CORRECT LIST FOR DEPLOYMENT ---
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
+    "https://vibe-navigator-hackathon-fr4d-5x0vtgefj.vercel.app",
 ]
+# ---
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -36,10 +36,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# --- End CORS Setup ---
 
-
-# --- Your existing endpoints ---
 @app.get("/")
 def read_root():
     return {"Hello": "Vibe Navigator"}
@@ -48,13 +45,8 @@ def read_root():
 def get_vibe(location_name: str):
     return get_vibe_summary(location_name)
 
-
-# --- [START] ADD THIS NEW ENDPOINT FOR THE MAP ---
 @app.get("/api/locations")
 def get_all_locations():
-    """
-    Returns a list of all unique locations with their coordinates for the map.
-    """
     pipeline = [
         {
             "$group": {
@@ -71,10 +63,8 @@ def get_all_locations():
             }
         },
         {
-            # Only return locations that have valid coordinates
             "$match": { "position": {"$ne": [None, None]} }
         }
     ]
     locations = list(reviews_collection.aggregate(pipeline))
     return locations
-# --- [END] ADD THIS NEW ENDPOINT ---
