@@ -1,12 +1,9 @@
 "use client";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-// --- [START] THIS IMPORT LIST INCLUDES THE ICONS FOR THE NEW TAGS ---
 import { Coffee, Music, Trees, Building, Sparkles, AlertTriangle, Search, Wind, Gem, VolumeX, Wine, ShieldCheck, Users, Lightbulb, Zap } from 'lucide-react';
-// --- [END] THIS IMPORT LIST INCLUDES THE ICONS FOR THE NEW TAGS ---
 
 const getVibeTheme = (tag) => {
-    // This function is correct
     switch (tag) {
         case 'lively': case 'energetic': case 'festive':
           return 'from-yellow-500/30 to-orange-400/30 border-yellow-300/50';
@@ -21,7 +18,6 @@ const getVibeTheme = (tag) => {
     }
 };
 
-// --- [START] THIS FUNCTION IS UPDATED WITH THE FINAL CASES ---
 const getIconComponentForTag = (tag) => {
     switch(tag) {
         case 'cozy':
@@ -56,13 +52,11 @@ const getIconComponentForTag = (tag) => {
             return Sparkles;
     }
 }
-// --- [END] THIS FUNCTION IS UPDATED ---
 
 export default function VibeCard({ vibeData, locationName }) {
   const [showCitations, setShowCitations] = useState(false);
 
   if (vibeData.error) {
-    // Error handling is correct
     return (
         <motion.div 
           className="w-full max-w-md p-6 rounded-xl shadow-lg bg-red-500/50 backdrop-blur-lg border border-red-300/50 text-white"
@@ -78,7 +72,6 @@ export default function VibeCard({ vibeData, locationName }) {
   }
 
   if (vibeData.status === 'not_found') {
-    // "Not found" handling is correct
     return (
       <motion.div 
         className="w-full max-w-md p-6 rounded-xl shadow-lg bg-white/50 backdrop-blur-lg border border-white/30"
@@ -88,10 +81,11 @@ export default function VibeCard({ vibeData, locationName }) {
             <Search className="w-8 h-8 text-gray-700"/>
             <h2 className="text-2xl font-bold text-gray-800">Hmm...</h2>
         </div>
-        <p className="text-gray-700 my-4">{vibeData.message || `I couldn't find anything about "${locationName}".`}</p>
+        {/* --- FIX 1: Replaced apostrophe with &apos; --- */}
+        <p className="text-gray-700 my-4">{vibeData.message || `I couldn&apos;t find anything about "${locationName}".`}</p>
         {vibeData.suggestions && vibeData.suggestions.length > 0 && (
           <div>
-            <h3 className="font-semibold text-gray-700">Perhaps you'd be interested in these spots?</h3>
+            <h3 className="font-semibold text-gray-700">Perhaps you&apos;d be interested in these spots?</h3>
             <ul className="list-disc list-inside mt-2 text-teal-700 font-medium">
               {vibeData.suggestions.map((suggestion, index) => (
                 <li key={index}>{suggestion}</li>
@@ -153,7 +147,8 @@ export default function VibeCard({ vibeData, locationName }) {
               <h4 className="font-semibold text-xs text-gray-700 mb-2">Based on these reviews:</h4>
               <ul className="list-disc list-inside space-y-2">
                 {citations.map((citation, index) => (
-                  <li key={index} className="text-sm text-gray-800 italic">"{citation}"</li>
+                  // --- FIX 2: Moved quotes inside the curly braces ---
+                  <li key={index} className="text-sm text-gray-800 italic">{`"${citation}"`}</li>
                 ))}
               </ul>
             </motion.div>
