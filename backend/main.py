@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from rag_service import get_vibe_summary
-
-# --- Database Connection Setup ---
 import os
 import pymongo
 import certifi
@@ -17,17 +15,15 @@ if not MONGO_URI:
 client = pymongo.MongoClient(MONGO_URI, tlsCAFile=certifi.where())
 db = client.get_database("vibe_navigator_db")
 reviews_collection = db.get_collection("reviews")
-# --- End Database Setup ---
 
 app = FastAPI()
 
-# --- THIS IS THE CORRECT LIST FOR DEPLOYMENT ---
+# --- THIS IS THE FINAL, CORRECTED LIST WITH YOUR LIVE URL ---
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://vibe-navigator-hackathon-fr4d-5x0vtgefj.vercel.app",
+    "https://vibe-navigator-hackathon.vercel.app",
 ]
-# ---
 
 app.add_middleware(
     CORSMiddleware,
@@ -48,23 +44,9 @@ def get_vibe(location_name: str):
 @app.get("/api/locations")
 def get_all_locations():
     pipeline = [
-        {
-            "$group": {
-                "_id": "$location_name",
-                "latitude": {"$first": "$latitude"},
-                "longitude": {"$first": "$longitude"}
-            }
-        },
-        {
-            "$project": {
-                "_id": 0,
-                "name": "$_id",
-                "position": ["$latitude", "$longitude"]
-            }
-        },
-        {
-            "$match": { "position": {"$ne": [None, None]} }
-        }
+        {"$group": {"_id": "$location_name", "latitude": {"$first": "$latitude"}, "longitude": {"$first": "$longitude"}}},
+        {"$project": {"_id": 0, "name": "$_id", "position": ["$latitude", "$longitude"]}},
+        {"$match": {"position": {"$ne": [None, None]}}}
     ]
     locations = list(reviews_collection.aggregate(pipeline))
     return locations
