@@ -1,44 +1,19 @@
 [
+  {"location_name": "Hauz Khas Village", "city": "Delhi", "category": "Social", "review": "Amazing place overlooking the lake. It's always buzzing with a creative crowd and great music. Perfect for a weekend evening."},
+  {"location_name": "Hauz Khas Village", "city": "Delhi", "category": "Social", "review": "Can get very crowded and loud, especially on weekends, but the vibe is worth it."},
+  {"location_name": "Lodhi Garden", "city": "Delhi", "category": "Park", "review": "A beautiful, historical park. It's vast and peaceful, perfect for morning walks or just relaxing with a book. Very well maintained."},
+  {"location_name": "Lodhi Garden", "city": "Delhi", "category": "Park", "review": "Great for picnics. You see a mix of families, couples, and fitness enthusiasts. It's a very calming, nature-filled space."},
+  {"location_name": "Perch Wine & Coffee Bar", "city": "Delhi", "category": "Cafe", "review": "A very chic and quiet spot. The coffee is excellent and it's great for conversations or getting some work done."},
+  {"location_name": "India Gate", "city": "Delhi", "category": "Monument", "review": "A majestic monument. The area is a popular hangout spot, especially in the evenings. It's full of people and has a very patriotic and lively feel."},
+  {"location_name": "Qutub Minar", "city": "Delhi", "category": "Monument", "review": "A stunning piece of historic architecture. It's a must-visit for history buffs. Can be crowded with tourists."},
+  {"location_name": "Garden of Five Senses", "city": "Delhi", "category": "Park", "review": "A lovely, sprawling park designed to stimulate your senses. It's less crowded than other parks and has beautiful sculptures and floral arrangements."},
   {
-    "location_name": "Hauz Khas Village",
+    "location_name": "United Coffee House, Connaught Place",
     "city": "Delhi",
     "category": "Cafe",
-    "review": "Amazing place overlooking the lake. It's always buzzing with a creative crowd and great music. Perfect for a weekend evening.",
-    "source": "Google Maps"
+    "review": "A legendary and historic place with a classic, old-world charm. It feels very sophisticated and is perfect for a quiet, formal meal."
   },
-  {
-    "location_name": "Hauz Khas Village",
-    "city": "Delhi",
-    "category": "Cafe",
-    "review": "Can get very crowded and loud, especially on weekends. The service can be a bit slow when it's busy, but the vibe is worth it.",
-    "source": "Zomato"
-  },
-  {
-    "location_name": "Lodhi Garden",
-    "city": "Delhi",
-    "category": "Park",
-    "review": "A beautiful, historical park. It's vast and peaceful, perfect for morning walks, jogs, or just relaxing with a book. Very well maintained.",
-    "source": "TripAdvisor"
-  },
-  {
-    "location_name": "Lodhi Garden",
-    "city": "Delhi",
-    "category": "Park",
-    "review": "Great for picnics. You see a mix of families, couples, and fitness enthusiasts. It's a very calming, nature-filled space right in the city.",
-    "source": "Google Maps"
-  },
-  {
-    "location_name": "Perch Wine & Coffee Bar",
-    "city": "Delhi",
-    "category": "Cafe",
-    "review": "A very chic and quiet spot. The coffee is excellent and it's great for conversations or getting some work done. A bit pricey but the quality is top-notch.",
-    "source": "Zomato"
-  },
-  {
-    "location_name": "India Gate",
-    "city": "Delhi",
-    "category": "Monument",
-    "review": "A majestic monument. The area around it is a popular hangout spot, especially in the evenings. It's full of people and has a very patriotic and lively feel.",
-    "source": "Google Maps"
-  }
-]
+  {"location_name": "Cafe Lota", "city": "Delhi", "category": "Cafe", "review": "Nestled in the Crafts Museum, this place has a unique, rustic, and quiet vibe. They serve traditional Indian food with a modern twist."},
+  {"location_name": "Humayun's Tomb", "city": "Delhi", "category": "Monument", "review": "An architectural masterpiece. It's incredibly serene and historic. A much more peaceful alternative to the more crowded monuments."},
+  {"location_name": "Sunder Nursery", "city": "Delhi", "category": "Park", "review": "A beautifully restored heritage park. It's huge, green, and perfect for a lazy Sunday stroll. It has a wonderful, tranquil vibe."}
+] 

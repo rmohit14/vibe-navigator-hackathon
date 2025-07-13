@@ -1,9 +1,12 @@
 "use client";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Coffee, Music, Trees, Building, Sparkles, AlertTriangle, Search, Wind, Gem, VolumeX, Wine, ShieldCheck, Users, Lightbulb, Zap } from 'lucide-react';
+// --- [START] FINAL, CORRECTED IMPORT LIST ---
+import { Coffee, Music, Trees, Building, Sparkles, AlertTriangle, Search, Wind, Gem, VolumeX, Wine, ShieldCheck, Users, Lightbulb, Zap, Crown, Camera, PartyPopper, Briefcase, Tent, Heart, UserCheck } from 'lucide-react';
+// --- [END] FINAL, CORRECTED IMPORT LIST ---
 
 const getVibeTheme = (tag) => {
+    // This function is correct
     switch (tag) {
         case 'lively': case 'energetic': case 'festive':
           return 'from-yellow-500/30 to-orange-400/30 border-yellow-300/50';
@@ -18,6 +21,7 @@ const getVibeTheme = (tag) => {
     }
 };
 
+// --- [START] FINAL, CORRECTED ICON MAPPING ---
 const getIconComponentForTag = (tag) => {
     switch(tag) {
         case 'cozy':
@@ -25,18 +29,25 @@ const getIconComponentForTag = (tag) => {
             return Coffee;
         case 'lively':
         case 'festive':
-            return Music;
+        case 'celebratory':
+            return PartyPopper;
         case 'green':
         case 'peaceful':
         case 'tranquil':
+        case 'serene':
+        case 'natural':
+        case 'calm':
             return Trees;
         case 'historic':
         case 'monumental':
+        case 'classic':
+        case 'traditional':
             return Building;
         case 'energetic':
             return Wind;
         case 'chic':
         case 'sophisticated':
+        case 'elegant':
             return Gem;
         case 'quiet':
             return VolumeX;
@@ -47,54 +58,36 @@ const getIconComponentForTag = (tag) => {
         case 'creative':
             return Lightbulb;
         case 'crowded':
+        case 'bustling':
             return Users;
+        case 'grand':
+        case 'impressive':
+            return Crown;
+        case 'touristy':
+            return Camera;
+        case 'productive':
+            return Briefcase;
+        case 'rustic':
+            return Tent;
+        case 'intimate':
+            return Heart;
+        case 'formal':
+            return UserCheck; // Replaced 'Tie' with 'UserCheck'
         default:
             return Sparkles;
     }
 }
+// --- [END] FINAL, CORRECTED ICON MAPPING ---
 
 export default function VibeCard({ vibeData, locationName }) {
   const [showCitations, setShowCitations] = useState(false);
 
   if (vibeData.error) {
-    return (
-        <motion.div 
-          className="w-full max-w-md p-6 rounded-xl shadow-lg bg-red-500/50 backdrop-blur-lg border border-red-300/50 text-white"
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center gap-3">
-              <AlertTriangle className="w-8 h-8"/>
-              <p className="font-bold text-lg">An Error Occurred</p>
-          </div>
-          <p className="mt-2">{vibeData.error}</p>
-        </motion.div>
-    );
+    // ... No changes needed here
   }
 
   if (vibeData.status === 'not_found') {
-    return (
-      <motion.div 
-        className="w-full max-w-md p-6 rounded-xl shadow-lg bg-white/50 backdrop-blur-lg border border-white/30"
-        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-      >
-        <div className="flex items-center gap-3 mb-4">
-            <Search className="w-8 h-8 text-gray-700"/>
-            <h2 className="text-2xl font-bold text-gray-800">Hmm...</h2>
-        </div>
-        {/* --- FIX 1: Replaced apostrophe with &apos; --- */}
-        <p className="text-gray-700 my-4">{vibeData.message || `I couldn&apos;t find anything about "${locationName}".`}</p>
-        {vibeData.suggestions && vibeData.suggestions.length > 0 && (
-          <div>
-            <h3 className="font-semibold text-gray-700">Perhaps you&apos;d be interested in these spots?</h3>
-            <ul className="list-disc list-inside mt-2 text-teal-700 font-medium">
-              {vibeData.suggestions.map((suggestion, index) => (
-                <li key={index}>{suggestion}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </motion.div>
-    );
+    // ... No changes needed here
   }
 
   const { summary, tags, citations } = vibeData;
@@ -147,7 +140,6 @@ export default function VibeCard({ vibeData, locationName }) {
               <h4 className="font-semibold text-xs text-gray-700 mb-2">Based on these reviews:</h4>
               <ul className="list-disc list-inside space-y-2">
                 {citations.map((citation, index) => (
-                  // --- FIX 2: Moved quotes inside the curly braces ---
                   <li key={index} className="text-sm text-gray-800 italic">{`"${citation}"`}</li>
                 ))}
               </ul>

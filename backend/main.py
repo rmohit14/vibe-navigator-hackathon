@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from rag_service import get_vibe_summary
+from rag_service import get_vibe_summary, get_locations_by_vibe
 import os
 import pymongo
 import certifi
@@ -50,3 +50,7 @@ def get_all_locations():
     ]
     locations = list(reviews_collection.aggregate(pipeline))
     return locations
+# Add this new endpoint to the end of main.py
+@app.get("/api/locations_by_vibe/{vibe_tag}")
+def get_locations_by_vibe_endpoint(vibe_tag: str):
+    return get_locations_by_vibe(vibe_tag)
