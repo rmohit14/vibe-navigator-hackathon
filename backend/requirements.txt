@@ -6,6 +6,7 @@ certifi
 langchain-google-genai
 langchain-text-splitters
 langchain-community
+langchain
 selenium
 beautifulsoup4
 geopy
